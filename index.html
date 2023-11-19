@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebGIS Bahaya Banjir</title>
+
+    <!--Fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!--Feather Icons-->
+    <script src="https://unpkg.com/feather-icons"></script>
+
+    <!--My Style-->
+    <link rel="stylesheet" href="assets/css/style.css" />
+
+    <!--Leaflet-->
+
+    <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+    integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+    crossorigin=""
+  />
+  
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<link rel="shortcut icon" type="image/x-icon" href="docs/images/favicon.ico" />
+
+
+</style>
+<!--Diagram Start-->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!--Diagram End-->
+
+  </head>
+  <body>
+    <!--Navbar Start-->
+    <nav class="navbar">
+      <a href="#" class="navbar-logo">WebGIS Bahaya <span>Banjir</span>.</a>
+
+      <div class="navbar-nav">
+        <a href="#home">Home</a>
+        <a href="#peta">Peta</a>
+        <a href="#about">Tentang</a>
+        <a href="#contact">Kontak</a>
+      </div>
+      <div class="navbar-extra">
+        <div class="download">
+          <button class="dropbtn" onclick="myFunction()" type="submit">
+            <i data-feather="download"></i>
+          </button>
+          <div class="download-content" id="myDropdown">
+            <a href="https://drive.google.com/file/d/1R411fPDupjkdcadqGGdYzoDuVSiY3kSz/view?usp=sharing" target="blank">Peta Bahaya Banjir</a>
+            <a href="https://drive.google.com/file/d/1n6t7NNs-iOZliPRtThXjrkWPpimA6HhH/view?usp=sharing" target="blank">Peta Kelerengan</a>
+            <a href="https://drive.google.com/file/d/1IgOgMujkY45EyoRmDqHP-aCZWKAb4FRe/view?usp=sharing" target="blank">Peta Tutupan Lahan</a>
+            <a href="https://drive.google.com/file/d/1jn1k2tNDDexerUQ140xvYM5CnCTdjXn8/view?usp=sharing" target="blank">Peta Curah Hujan</a>
+          </div>
+        </div>
+        <div id="hamburger-menu">
+          <a><i data-feather="menu"></i> </a>
+        </div>
+      </div>
+    </nav>
+    <!--Navbar End-->
+
+    <!--Home Section Start-->
+    <section id="home" class="home">
+      <main class="content">
+        <h1>WEBGIS Bahaya <span>Banjir</span> Kabupaten Muara Enim</h1>
+        <p>
+          WebGIS ini menyajikan peta kawasan bahaya banjir Kabupeten Muara Enim,
+          Sumatera Selatan
+        </p>
+        <a href="#peta" class="cta">Peta Bahaya Banjir</a>
+      </main>
+    </section>
+    <!--Home Section End-->
+
+    <!--Peta Section Start-->
+    <div id="peta" class="jarak"></div>
+    <section class="peta">
+      <h1>Peta</h1>
+    </section>
+    <div class="container">
+      <div id="info">
+        <div class="tab">
+          <button class="tablinks" onclick="openCity(event, 'Bahaya Banjir')" id="defaultOpen">Bahaya Banjir</button>
+          <button class="tablinks" onclick="openCity(event, 'Kelerengan')">Kelerengan</button>
+          <button class="tablinks" onclick="openCity(event, 'Tutupan Lahan')">Tutupan Lahan</button>
+          <button class="tablinks" onclick="openCity(event, 'Curah Hujan')">Curah Hujan</button>
+        </div>
+      
+        <div id="Bahaya Banjir" class="tabcontent">
+          <h3>Bahaya Banjir</h3>
+          <p>Bahaya/Ancaman (hazard) adalah suatu situasi atau kejadian atau peristiwa yang mempunyai potensi dapat menimbulkan kerusakan, kehilangan jiwa manusia, atau kerusakan lingkungan.</p><br>
+          <p>Peta Bahaya banjir ini dihasilkan dari  Overlay Parameter Banjir berupa data Kemiringan Lereng, Tutupan Lahan,  dan Curah Hujan, yang selanjutnya dilakukan skoring dan pembobotan berdasarkan SNI 8197 Tahun 2015 dengan jenis banjir sungai, sehingga didapatkan Kawasan Bahaya Banjir Kabupaten Muara Enim tingkat bahaya menengah sebesar 83.34% dengan luas 5802.56 km2, dan bahaya tinggi diperoleh sebesar 16.65% dengan luas 1159.16 km2</p>
+          <canvas id="myChart" class="diagram"></canvas>
+        </div>
+         
+        <div id="Kelerengan" class="tabcontent">
+          <h3>Kemiringan Lereng</h3>
+          <p>Data kemiringan lereng diperoleh dari pengolahan data DEM. Data DEM dilakukan proses berupa slope yang merupakan tool yang dapat mengidentifikasi kecuraman pada setiap sel permukaan raster. Hasil kelerengan yang diperoleh dari slope, selanjutnya dilakukan pengkelasan ulang (Reclassify) berdasarkan kelas parameter. Setelah melakukan reclassify data kelerengan yang masih berformat raster diubah menjadi format vector berupa polygon sehingga selanjutnya dapat dilakukan pemberian skor pada tiap kelas yang dimiliki. Dari serangkaian proses tersebut diperoleh kelas kelerengan > 4%  seluas 2867,74 km2, kelas kelerengan 2 - 4% seluas 2424, 23 km2 dan kelas kelerengan 0-2% seluas 1669,74 km2.</p>
+        </div>
+      
+        <div id="Tutupan Lahan" class="tabcontent">
+          <h3>Tutupan Lahan</h3>
+          <p>Data penutup lahan diperoleh dari pengolahan citra satelit Landsat 8 menggunakan Google Earth Engine. Citra dilakukan klasifikasi terbimbing (Supervised) dengan komposit band 5, 6 dan 4 yang menghasilkan citra dengan kenampakan objek daratan dan perairan yang baik, serta menggunakan Random Forest sebagai algoritmanya. Dari proses klasifikasi ini diperoleh kelas vegetasi seluas 6611,62 km2, kelas Kawasan terbangun seluas 316,40 km2, dan kelas badan air seluas 33,69 km2.</p>
+        </div>
+
+        <div id="Curah Hujan" class="tabcontent">
+          <h3>Curah Hujan</h3>
+          <p>Data curah hujan bulanan CHIRPS tahun 2018 – 2022 dilakukan penjumlahan (SUM) pertahunnya dengan menggunakan tool, selanjutkan dengan tool yang sama dapatkan nilai rerata (MEAN) curah hujan tahunan selama 5 tahun. dilakukan interpolasi dengan metode Inverse Distance Weighting (IDW), sehingga didapatkan klasifikasinya. Dari proses klasifikasi ini diperoleh kelas curah hujan 1500 – 3000 mm seluas 2495,14 km2 dan kelas curah hujan >3000 mm seluas 4466,58 km2.</p>
+        </div>
+      </div>
+
+      <div id="map"></div>
+    </div>
+  </div>
+  <!--Diagram start-->
+  <script>
+    // Ambil elemen canvas
+    var ctx = document.getElementById("myChart").getContext("2d");
+
+    // Data untuk 2 dataset
+    var data = {
+      labels: [
+        "Semende Darat Laut",
+        "Semende Darat Ulu",
+        "Semende Darat Tengah",
+        "Tanjung Agung",
+        "Panang Enim",
+        "Rambang",
+        "Lubai",
+        "Lubai Ulu",
+        "Lawang Kidul",
+        "Muara Enim",
+        "Ujan Mas",
+        "Gunung Megang",
+        "Benakat",
+        "Belimbing",
+        "Rambang Niru",
+        "Empat Petulai Dangku",
+        "Gelumbang",
+        "Lembak",
+        "Sungai Rotan",
+        "Muara Belida",
+        "Kelekar",
+        "Belida Darat",
+      ],
+      datasets: [
+        {
+          label: "Menengah",
+          data: [
+          214.98 , 492.21, 190.99, 400.85, 183.73, 374.19, 422.46, 335.96, 184.24, 130.86, 231.79, 370.54, 388.76, 51.05, 392.85,
+          91.67, 608.31, 134.17, 207.34, 125.79, 152.79, 117.23,
+          ],
+          backgroundColor: "rgba(147, 191, 207, 1)", // Warna latar belakang batang
+          borderColor: "rgba(147, 191, 255, 1)", // Warna garis batang
+          borderWidth: 1, // Lebar garis batang
+        },
+        {
+          label: "Tinggi",
+          data: [
+            3.85, 1.92, 1.54, 46.98, 10.12, 121.33, 81.22, 18.58, 90.68, 60.63, 49.71, 101.85, 71.80, 19.21, 119.66,
+            43.96, 104.81, 60.96, 90.39, 20.74, 6.11, 33.01,
+          ],
+          backgroundColor: "rgba(255, 0, 0, 0.2)", // Warna latar belakang batang
+          borderColor: "rgba(255, 0, 0, 1)", // Warna garis batang
+          borderWidth: 1, // Lebar garis batang
+        },
+      ],
+    };
+
+    // Konfigurasi chart
+    var config = {
+      type: "bar",
+      data: data,
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      },
+    };
+
+    // Buat chart
+    var myChart = new Chart(ctx, config);
+  </script>
+  <!--Diagram end-->
+
+    <!--Peta Section End-->
+
+    <!--About Section Start-->
+    <div id="about" class="jarak"></div>
+    <section class="about">
+      <h1>Tentang</h1>
+      <br>
+      <h3>Deskripsi</h3>
+      <br>
+      <p>WebGIS atau Sistem Informasi Geografis Berbasis WEB ini merupakan hasil Tugas Akhir dengan judul <b>"VISUALISASI KAWASAN BAHAYA BANJIR MENGGUNAKAN SISTEM INFORMASI GEOGRAFIS BERBASIS WEB (STUDI KASUS: KABUPATEN MUARA ENIM, SUMATERA SELATAN)"</b> yang disusun oleh Ulfa Dwi Hansanafia (119230005) untuk memenuhi salah satu persyaratan kelulusan pada jenjang Sarjana Teknik Program Studi Teknik Geomatika di Institut Teknologi Sumatera. WebGIS ini berisi informasi terkait Bahaya Banjir di Kabupaten Muara Enim serta Parameter-parameter penyebabnya yang ditampilkan secara spasial berbentuk peta serta dapat diunduh agar dapat dilihat secara offline.</p>
+      <br>
+      <h3>Tujuan</h3>
+      <br>
+      <p>Menyajikan visualisasi hasil identifikasi banjir di kabupaten Muara Enim berbasis WebGIS yang dapat diakses oleh pemerintah daerah dan masyarakat dengan mudah</p>
+      <br>
+      <h3>Sumber Data</h3>
+      <br>
+      <p>
+        1.	Data batas administrasi kabupaten Muara Enim Provinsi Sumatra Selatan yang diperoleh dari Dinas PUPR kabupaten Muara Enim<br>
+        2.	Data Digital Elevation Model (DEM) Kabupaten Muara Enim yang diperoleh dari https://tanahair.indonesia.go.id/ untuk pembuatan peta kelerengan<br>
+        3.	Citra Landsat 8 Kabupaten Muara Enim Provinsi Sumatra Selatan yang digunakan untuk membuat Peta Tutupan Lahan menggunakan Google Earth Engine<br>
+        4.	Data curah hujan bulanan tahun 2018-2022 yang diperoleh dari https://www.chc.ucsb.edu/  untuk pembuatan peta curah hujan<br>
+        5.	Data hasil studi literatur sebagai penunjang peneliti.
+    </p>
+    </section>
+
+    <!--About Section End-->
+
+    <!--Contact Section Start-->
+    <div id="contact" class="jarak"></div>
+    <section class="contact">
+      <h1>Kontak</h1>
+      <br>
+      <h3>Ulfa Dwi Hansanafia</h3>
+      <p>NIM 119230005
+        <br>
+        Program Studi Teknik Geomatika
+        <br>
+        Jurusan Teknologi Infrastruktur dan Kewilayahan
+        <br>
+        Institut Teknologi Sumatera
+        <br>
+        Telp. +6285841315220
+        <br>
+        Email : ulfa.119230005@student.itera.ac.id
+
+      </p>
+    </section>
+
+    <!--Contact Section End-->
+
+    <!--Footer Start-->
+<footer>
+<div class="links">
+  <a href="#home">Home</a>
+  <a href="#peta">Peta</a>
+  <a href="#about">Tentang</a>
+  <a href="#contact">Kontak</a>
+</div>
+
+<div class="credit">
+<p>Created by <a href="">ulfadwihansanafia</a>| &copy; 2023.</p>
+
+</div>
+</footer>
+    <!--Footer End-->
+    
+    <!--Feather Icons-->
+    <script>
+      feather.replace();
+    </script>
+
+    <!--My Java Script-->
+    <script src="assets/js/script.js"></script>
+
+    <!--Script Leaflet-->
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script
+      src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+      integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+      crossorigin=""></script>
+    <script src="assets/js/leaflet.ajax.js"></script>
+    <script src="assets/js/leaflet.ajax.min.js"></script>
+    <script type="text/javascript">
+
+    //Style Peta
+    function getColor(d) {
+        return d == 'Tinggi' ? 'red' :
+               d == 'Menengah'  ? 'yellow' :
+               d == 'Vegetasi'? 'Green' :
+               d == 'Badan Air'  ? 'yellow' :
+               d == 'Kawasan Terbangun'  ? 'Red' :
+               d == '0-2%'  ? 'Red' :
+               d == '2-4%'  ? 'yellow' :
+               d == '>4%'  ? 'Green' :
+               d == '>3000 mm'  ? 'Red' :
+               d == '1500-3000 mm'  ? 'yellow' :
+                'yellow' ;   
+    }
+
+    function StyleTupla(feature) {
+        return {
+            fillColor: getColor(feature.properties.Kelas),
+            weight: 1,
+            opacity: 0,
+            color: 'white',
+            fillOpacity: 1
+        };
+    }
+          
+    function myStyle(feature) {
+        return {
+            fillColor: getColor(feature.properties.Tingkat),
+            weight: 1,
+            opacity: 0,
+            color: 'white',
+            fillOpacity: 1
+        };
+    }
+
+    function Stylecurah(feature) {
+        return {
+            fillColor: getColor(feature.properties.Kelas),
+            weight: 1,
+            opacity: 0,
+            color: 'white',
+            fillOpacity: 1
+        };
+    }
+
+    function StyleKec(feature) {
+        return {
+            fillColor: "orange",
+            weight: 1,
+            opacity: 1,
+            color: 'black',
+            fillOpacity: 0.5
+        };
+    }
+
+    function StyleKel(feature) {
+        return {
+            fillColor: getColor(feature.properties.Kelas),
+            weight: 1,
+            opacity: 0,
+            color: 'white',
+            fillOpacity: 1
+        };
+    }
+
+    var osm = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '© OpenStreetMap'
+    });
+
+    var GoogleSatelliteHybrid = L.tileLayer('https://mt1.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',{
+        maxZoom : 19,
+        attribution : 'Satellite'
+      });
+
+    var map = L.map('map', {
+      center: [-3.668163, 104.019051],
+      zoom: 9,
+      layers: [osm, GoogleSatelliteHybrid]
+    });
+
+    var curahhujan = new L.GeoJSON.AJAX(["assets/geojson/curahhujan2.geojson"],{onEachFeature:popUp3,style: Stylecurah}).addTo(map);
+    var tutupanlahan = new L.GeoJSON.AJAX(["assets/geojson/tutupanlahan2.geojson"],{onEachFeature:popUp2, style: StyleTupla}).addTo(map);
+    
+    var kelerengan = new L.GeoJSON.AJAX(["assets/geojson/kelerengan8.geojson"],{onEachFeature:popUp5, style: StyleKel}).addTo(map);
+    var kecamatan = new L.GeoJSON.AJAX(["assets/geojson/kecamatan.geojson"],{onEachFeature:popUp4, style: StyleKec}).addTo(map);
+
+    console.log(curahhujan)
+
+    var baseMaps = {
+        "OpenStreetMap": osm,
+        "GoogleSatellite": GoogleSatelliteHybrid
+    };
+
+    var overlayMaps = {
+               "Bahaya Banjir": bahayabanjir,
+               "Kelerengan": kelerengan,
+               "Tutupan Lahan": tutupanlahan,
+               "Curah Hujan": curahhujan,
+               "Adm Kecamatan": kecamatan,
+               };
+
+    function popUp(f,l){
+    var out = ["<b>Bahaya Banjir</b>"];
+        if (f.properties){
+        for(key in f.properties){
+            out.push(key+": "+f.properties[key]);
+        }
+        l.bindPopup(out.join("<br />"));
+       }
+      }
+
+
+    function popUp2(f,l){
+    var out = ["<b>Tutupan Lahan</b>"];
+        if (f.properties){
+        for(key in f.properties){
+            out.push(key+": "+f.properties[key]);
+        }
+        l.bindPopup(out.join("<br />"));
+       }
+      }
+
+      function popUp3(f,l){
+    var out = ["<b>Curah Hujan</b>"];
+        if (f.properties){
+        for(key in f.properties){
+            out.push(key+": "+f.properties[key]);
+        }
+        l.bindPopup(out.join("<br />"));
+       }
+      }
+
+      function popUp4(f,l){
+    var out = ["<b>Batas Administrasi Kecamatan</b>"];
+        if (f.properties){
+        for(key in f.properties){
+            out.push(key+": "+f.properties[key]);
+        }
+        l.bindPopup(out.join("<br />"));
+       }
+      }
+
+      function popUp5(f,l){
+    var out = ["<b>Kelerengan</b>"];
+        if (f.properties){
+        for(key in f.properties){
+            out.push(key+": "+f.properties[key]);
+        }
+        l.bindPopup(out.join("<br />"));
+       }
+      }
+        
+      var layerControl = L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+          </script>
+
+  </body>
+</html>
