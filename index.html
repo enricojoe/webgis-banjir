@@ -364,7 +364,7 @@
 
     var curahhujan = new L.GeoJSON.AJAX(["assets/geojson/curahhujan2.geojson"],{onEachFeature:popUp3,style: Stylecurah}).addTo(map);
     var tutupanlahan = new L.GeoJSON.AJAX(["assets/geojson/tutupanlahan2.geojson"],{onEachFeature:popUp2, style: StyleTupla}).addTo(map);
-    
+    var bahayabanjir = new L.GeoJSON.AJAX(["assets/geojson/bahayabanjir7.geojson"],{onEachFeature:popUp, style: myStyle}).addTo(map);
     var kelerengan = new L.GeoJSON.AJAX(["assets/geojson/kelerengan8.geojson"],{onEachFeature:popUp5, style: StyleKel}).addTo(map);
     var kecamatan = new L.GeoJSON.AJAX(["assets/geojson/kecamatan.geojson"],{onEachFeature:popUp4, style: StyleKec}).addTo(map);
 
